@@ -10,9 +10,9 @@ const client_id = "f40cf392b7f34912840014a4ecd75299";
 const client_secret = "ffb1dee56c3843f68a67a31abd93b09c";
 const redirect_uri = "https://renmoce.github.io/RenMoceMusic_Callback/callback.html";
 
-let tokens = {}; // Tu budeme na zaËiatok ukladaù tokeny do pam‰te
+let tokens = {}; // Tu budeme na za√®iatok uklada¬ù tokeny do pam√§te
 
-// Endpoint na v˝menu autorizaËnÈho kÛdu za tokeny
+// Endpoint na v√Ωmenu autoriza√®n√©ho k√≥du za tokeny
 app.post("/spotify/token", async (req, res) => {
   const code = req.body.code;
   if (!code) return res.status(400).json({ error: "No code provided" });
@@ -38,7 +38,7 @@ app.post("/spotify/token", async (req, res) => {
     tokens = {
       access_token: data.access_token,
       refresh_token: data.refresh_token,
-      expires_in: Date.now() + data.expires_in * 1000, // Ëas expir·cie
+      expires_in: Date.now() + data.expires_in * 1000, // √®as expir√°cie
     };
 
     res.json(tokens);
@@ -78,13 +78,13 @@ app.post("/spotify/refresh", async (req, res) => {
   }
 });
 
-// Endpoint na zÌskanie aktu·lneho access tokenu (voliteænÈ)
+// Endpoint na z√≠skanie aktu√°lneho access tokenu (volite¬æn√©)
 app.get("/spotify/token", (req, res) => {
   if (!tokens.access_token) return res.status(404).json({ error: "No access token stored" });
 
-  // Ak token skoro vypröÌ, mÙûeö tu rovno volaù refresh endpoint (prÌpadne to rieö na klientskej strane)
+  // Ak token skoro vypr≈°√≠, m√¥≈æe≈° tu rovno vola¬ù refresh endpoint (pr√≠padne to rie≈° na klientskej strane)
   res.json(tokens);
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Spotify backend beûÌ na porte ${PORT}`));
+app.listen(PORT, () => console.log(`Spotify backend be≈æ√≠ na porte ${PORT}`));
