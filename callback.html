@@ -30,7 +30,7 @@
     <script>
     async function fetchToken(code) {
         try {
-            const res = await fetch("http://localhost:3000/spotify/token", {
+            const res = await fetch("POST https://renmocemusic-callback.onrender.com/spotify/token", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ code }),
