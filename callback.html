@@ -1,30 +1,58 @@
-<script>
-  // Zober query parametre, nie hash
-  const urlParams = new URLSearchParams(window.location.search);
-  const code = urlParams.get("code");
-
-  if (code) {
-    document.getElementById("message").innerText = "Získavam prístupový token...";
-    // Pošli kód na backend
-    fetch("https://renmocemusic-callback.onrender.com/spotify/token", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.access_token) {
-        document.getElementById("message").innerText = "✅ Token získaný úspešne!";
-        console.log("Access Token:", data.access_token);
-      } else {
-        document.getElementById("message").innerText = "❌ Chyba pri získavaní tokenu: " + JSON.stringify(data);
-      }
-    })
-    .catch(err => {
-      document.getElementById("message").innerText = "❌ Chyba pri komunikácii s backendom.";
-      console.error(err);
-    });
-  } else {
-    document.getElementById("message").innerText = "❌ Nebol nájdený autorizačný kód.";
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RenMoce Spotify Callback</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 50px;
+    background-color: #1db954;
+    color: white;
   }
+  .container {
+    background: rgba(0,0,0,0.3);
+    padding: 30px;
+    border-radius: 12px;
+    display: inline-block;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Spotify autorizácia</h1>
+  <p id="message">Načítavam...</p>
+</div>
+
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const code = urlParams.get("code");
+
+if (code) {
+  document.getElementById("message").innerText = "Získavam prístupový token...";
+  fetch("https://renmocemusic-callback.onrender.com/spotify/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.access_token) {
+      document.getElementById("message").innerText = "✅ Token získaný úspešne!";
+      console.log("Access Token:", data.access_token);
+    } else {
+      document.getElementById("message").innerText = "❌ Chyba pri získavaní tokenu: " + JSON.stringify(data);
+    }
+  })
+  .catch(err => {
+    document.getElementById("message").innerText = "❌ Chyba pri komunikácii s backendom.";
+    console.error(err);
+  });
+} else {
+  document.getElementById("message").innerText = "❌ Nebol nájdený autorizačný kód.";
+}
 </script>
+</body>
+</html>
