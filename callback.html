@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RenMoce Spotify Callback</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #1db954;
+            color: white;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Spotify autorizácia úspešná</h1>
+        <p id="message">Získavanie prístupového tokenu...</p>
+    </div>
+
+    <script>
+    const hash = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
+    const accessToken = params.get("access_token");
+
+    if (accessToken) {
+      document.getElementById("message").innerText = "Access token získaný: " + accessToken;
+      // Tu si môžeš uložiť token do localStorage, odoslať na server, atď.
+      console.log("Access Token:", accessToken);
+    } else {
+      document.getElementById("message").innerText = "❌ Nepodarilo sa získať prístupový token.";
+    }
+    </script>
+</body>
+</html>
