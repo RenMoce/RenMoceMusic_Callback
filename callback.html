@@ -23,21 +23,40 @@
 </head>
 <body>
     <div class="container">
-        <h1>✅ Spotify autorizácia úspešná</h1>
-        <p id="message">Získavanie prístupového tokenu...</p>
+        <h1>Spotify autorizácia</h1>
+        <p id="message">Čakám na autorizáciu...</p>
     </div>
 
     <script>
-    const hash = window.location.hash.substring(1);
-    const params = new URLSearchParams(hash);
-    const accessToken = params.get("access_token");
+    async function fetchToken(code) {
+        try {
+            const res = await fetch("http://localhost:3000/spotify/token", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ code }),
+            });
+            const data = await res.json();
+            if (data.access_token) {
+                document.getElementById("message").innerText = "✅ Spotify autorizácia úspešná";
+                console.log("Access Token:", data.access_token);
+            } else {
+                document.getElementById("message").innerText = "❌ Chyba pri získaní tokenu.";
+                console.error(data);
+            }
+        } catch (e) {
+            document.getElementById("message").innerText = "❌ Chyba pri komunikácii so serverom.";
+            console.error(e);
+        }
+    }
 
-    if (accessToken) {
-      document.getElementById("message").innerText = "Access token získaný: " + accessToken;
-      // Tu si môžeš uložiť token do localStorage, odoslať na server, atď.
-      console.log("Access Token:", accessToken);
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+
+    if (code) {
+        document.getElementById("message").innerText = "Získavanie prístupového tokenu...";
+        fetchToken(code);
     } else {
-      document.getElementById("message").innerText = "❌ Nepodarilo sa získať prístupový token.";
+        document.getElementById("message").innerText = "❌ Autorizačný kód nebol nájdený.";
     }
     </script>
 </body>
